@@ -1,9 +1,13 @@
-version: "3"
+version: "3.9"
 services:
   rendertron:
     container_name: rendertron
     restart: always
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        TARGETPLATFORM: linux/arm64  # Pass the build target as an argument
     image: rendertron
     ports:
       - "3000:3000"

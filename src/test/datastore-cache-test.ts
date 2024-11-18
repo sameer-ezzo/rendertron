@@ -168,7 +168,7 @@ test('refreshCache refreshes cache', async (t: ExecutionContext) => {
   res = await server.get('/refreshTest?refreshCache=true');
   t.is(res.status, 200);
   t.is(res.text, 'updated content');
-  t.is(res.header['x-rendertron-cached'], undefined);
+  t.is(res.header['x-rendertron-cached'], '');
 });
 
 test.serial(
