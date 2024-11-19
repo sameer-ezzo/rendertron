@@ -107,7 +107,6 @@ export class Rendertron {
     this.app.use(route.get('/pdf/:url(.*)', this.handlePdfRequest.bind(this)));
     this.app.use(route.post('/pdf/:url(.*)', this.handlePdfRequest.bind(this)));
 
-
     return this.app.listen(+this.port, this.host, () => {
       console.log(`Listening on port ${this.port}`);
     });
@@ -176,7 +175,7 @@ export class Rendertron {
 
   async handlePdfRequest(ctx: Koa.Context, url: string) {
     if (!this.renderer) {
-      throw (new Error('No renderer initalized yet.'));
+      throw new Error('No renderer initalized yet.');
     }
 
     if (this.restricted(url)) {
@@ -203,8 +202,14 @@ export class Rendertron {
         ctx.set(key, this.config.headers[key]);
       }
 
-      const filename = ctx.request.query.filename || (ctx.request.body && (<any>ctx.request.body).filename);
-      if (filename) ctx.set('Content-Disposition', `attachment; filename="${filename}.pdf"`);
+      const filename =
+        ctx.request.query.filename ||
+        (ctx.request.body && (<any>ctx.request.body).filename);
+      if (filename)
+        ctx.set(
+          'Content-Disposition',
+          `attachment; filename="${filename}.pdf"`
+        );
 
       ctx.set('Content-Type', 'application/pdf');
       ctx.set('Content-Length', pdf.length.toString());

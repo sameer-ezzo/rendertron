@@ -30,7 +30,7 @@ RUN wget --quiet https://raw.githubusercontent.com/vishnubob/wait-for-it/master/
 USER pptruser
 WORKDIR /home/pptruser
 RUN npm i puppeteer --verbose --f
-COPY package.json .
+COPY --chown=pptruser:pptruser package.json .
 RUN npm i --verbose --f
 COPY --chown=pptruser:pptruser . .
 RUN npm run build

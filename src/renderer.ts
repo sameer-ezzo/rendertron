@@ -1,4 +1,9 @@
-import { Browser, HTTPRequest, HTTPResponse, ScreenshotOptions } from 'puppeteer';
+import {
+  Browser,
+  HTTPRequest,
+  HTTPResponse,
+  ScreenshotOptions,
+} from 'puppeteer';
 import url from 'url';
 import { dirname } from 'path';
 
@@ -38,7 +43,10 @@ export class Renderer {
       return true;
     }
 
-    if (this.config.restrictedUrlPattern && requestUrl.match(new RegExp(this.config.restrictedUrlPattern))) {
+    if (
+      this.config.restrictedUrlPattern &&
+      requestUrl.match(new RegExp(this.config.restrictedUrlPattern))
+    ) {
       return true;
     }
 
@@ -322,17 +330,23 @@ export class Renderer {
     return buffer;
   }
 
-  async pdf(
-    url: string,
-    options?: any): Promise<Buffer> {
+  async pdf(url: string, options?: any): Promise<Buffer> {
     const page = await this.browser.newPage();
 
     let response: Response | null = null;
 
     try {
       // Navigate to page. Wait until there are no oustanding network requests.
-      response = (await page.goto(url, { timeout: this.config.timeout, waitUntil: 'networkidle0' })) as unknown as Response;
-      if (options && options.waitForSelector) await page.waitForSelector(options.waitForSelector, { visible: true, timeout: this.config.timeout });
+      response = (await page.goto(url, {
+        timeout: this.config.timeout,
+        waitUntil: 'networkidle0',
+      })) as unknown as Response;
+
+      if (options && options.waitForSelector)
+        await page.waitForSelector(options.waitForSelector, {
+          visible: true,
+          timeout: this.config.timeout,
+        });
     } catch (e) {
       console.error(e);
     }
@@ -354,10 +368,10 @@ export class Renderer {
       headerTemplate: '',
       footerTemplate: '',
       printBackground: true,
-      format: 'A4'
-    }
+      format: 'A4',
+    };
     const pdfOptions = Object.assign({}, defaults, options);
-    const buffer = await page.pdf(pdfOptions) as Buffer;
+    const buffer = (await page.pdf(pdfOptions)) as Buffer;
     await page.close();
     return buffer;
   }
